@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+{% load repo_tags %}
+<html>
+<head>
+	<title>Repository View</title>
+</head>
+<body style="text-align: center;">
+	<div>
+		<h2>RepositoryID : {{repo_obj.repo_id}}</h2>
+	</div>
+	<div>
+		<form name="upload_form" action="." method="post" enctype="multipart/form-data" >{% csrf_token %}
+			Image : 
+			<input type="file" name="repo_image" id="repo_image" accept="image/*" /> <br /> <br />
+			Audio : 
+			<input type="file" name="repo_audio" id="repo_audio" accept="audio/*" /> <br /> <br />
+			Video : 
+			<input type="file" name="repo_video" id="repo_video" accept="video/*" /> <br /> <br />
+			<input type="submit" name="submit_btn" />
+			<a href="/repos-list/">
+				<input type="button" name="cancel_btn" value="Cancel" />
+			</a>
+		</form>
+	</div>
+	<div>
+		<h4> Repository Files </h4>
+		<table border="1" style="margin-left: 25%;">
+			<tr>
+			<th>S.No</th>
+			<th>Image</th>
+			<th>Audio</th>
+			<th>Video</th>
+			</tr>
+			{% for i in repo_files %}
+			<tr>
+				<td>{{forloop.counter}}</td>
+				<td>
+				<a href="/download-file/{{i.id}}/?file_type=image"> {{i.repo_image.name|file_name}} </a>
+				</td>
+				<td>
+				<a href="/download-file/{{i.id}}/?file_type=audio"> {{i.repo_audio.name|file_name}} </a>
+				</td>
+				<td>
+				<a href="/download-file/{{i.id}}/?file_type=video"> {{i.repo_video.name|file_name}} </a>
+				</td>
+			</tr>
+			{% endfor %}
+		</table>
+	</div>
+</body>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">
+//binds to onchange event of your input field
+$('#repo_image').bind('change', function() {
+
+  //this.files[0].size gets the size of your file.
+  var file_size = (this.files[0].size);
+  alert(file_size);
+
+});
+</script>
+
+</html>

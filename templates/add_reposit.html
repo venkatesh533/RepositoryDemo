@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Add Repository</title>
+</head>
+<style>
+.divcls{
+	text-align:center;
+	margin-top: 10%;
+}
+</style>
+<body>
+	<div class="divcls">
+		<h2>Add Repository</h2>
+		<form action="." name="add_repo" id="add_repo" method="post">{% csrf_token %}
+			Repo ID:
+			<input type="text" name="repo_id" required /> <br />
+			<input type="submit" name="submit_btn" value="Submit" style="margin-top: 30px;" />
+			<a href="/repos-list/">
+				<input type="button" name="cancel_btn" value="Cancel" />
+			</a>
+		</form>
+	</div>
+</body>
+</html>

@@ -1,0 +1,12 @@
+*~
+*#*
+*.pyc
+*.swp
+*.wsgi
+*.komodoproject
+__pycache__
+/DjangoProject/settings.py
+/DjangoProject/wsgi.py
+/static/**/*
+/ckeditor/**/*
+*.ipynb
