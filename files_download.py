@@ -22,7 +22,7 @@ def download_file(request,pk):
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
     # import ipdb;ipdb.set_trace();
     file_name = str(download_file.name)
-    file_path = settings.MEDIA_ROOT+'\\'+file_name
+    file_path = settings.MEDIA_ROOT+file_name
     
     content_type = mimetypes.guess_type(file_name.split('/')[::-1][0])[0]
     wrapper = FileWrapper(open(file_path,'rb'))

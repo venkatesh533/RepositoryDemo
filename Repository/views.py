@@ -44,12 +44,14 @@ def repo_view(request,pk):
 		repo_image = file_uploads(request,'repo_image')
 		repo_audio = file_uploads(request,'repo_audio')
 		repo_video = file_uploads(request,'repo_video')
-		repofile_obj = RepositoryFiles.objects.create(repo=repo_obj)
-		repofile_obj.repo_image = repo_image
-		repofile_obj.repo_audio = repo_audio
-		repofile_obj.repo_video = repo_video
-		repofile_obj.save()
-
+		if repo_image or repo_audio or repo_video:
+			repofile_obj = RepositoryFiles.objects.create(repo=repo_obj)
+			repofile_obj.repo_image = repo_image
+			repofile_obj.repo_audio = repo_audio
+			repofile_obj.repo_video = repo_video
+			repofile_obj.save()
+		else:
+			msg = 'Please upload image/audio/video file'
 
 	return render(request,'repo_view.html',locals())	
 

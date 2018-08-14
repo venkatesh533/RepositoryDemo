@@ -21,6 +21,9 @@
 				<input type="button" name="cancel_btn" value="Cancel" />
 			</a>
 		</form>
+		{% if msg %}
+			<p style="color: red;">{{msg}}</p>
+		{% endif %}
 	</div>
 	<div>
 		<h4> Repository Files </h4>
