@@ -24,7 +24,7 @@ def add_reposit(request):
 
 ## repositories list page ##
 def repos_list(request):
-	repos = Repository.objects.filter(active=2)
+	repos = Repository.objects.filter(active=2).order_by('-id')
 	return render(request,'repos_list.html',locals())
 
 ## fun to upload file objects ##

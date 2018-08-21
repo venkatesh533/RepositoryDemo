@@ -38,25 +38,37 @@
 			<tr>
 				<td>{{forloop.counter}}</td>
 				<td>
-				{% getmedia_file i.id 'image' as file_path %}
-				<img src="{{file_path}}" width="200" height="200" />
-				<a href="/download-file/{{i.id}}/?file_type=image"> Download </a>
+				{% if i.repo_image %}
+					{% getmedia_file i.id 'image' as file_path %}
+					<img src="{{file_path}}" width="200" height="200" />
+					<a href="/download-file/{{i.id}}/?file_type=image"> Download </a>
+				{% else %}
+					No Image File
+				{% endif %}
 				</td>
 				<td>
-				{% getmedia_file i.id 'audio' as file_path %}
-				<audio controls>
-					<source src="{{file_path}}" type="audio/mpeg">
-					Your browser does not support the audio tag.
-				</audio>
-				<a href="/download-file/{{i.id}}/?file_type=audio"> Download </a>
+				{% if i.repo_audio %}
+					{% getmedia_file i.id 'audio' as file_path %}
+					<audio controls>
+						<source src="{{file_path}}" type="audio/mpeg">
+						Your browser does not support the audio tag.
+					</audio>
+					<a href="/download-file/{{i.id}}/?file_type=audio"> Download </a>
+				{% else %}
+					No Audio File
+				{% endif %}
 				</td>
 				<td>
-				{% getmedia_file i.id 'video' as file_path %}
-				<video width="300" height="200" controls>
-					<source src="{{file_path}}" type="video/mp4">
-					Your browser does not support the video tag.
-				</video>
-				<a href="/download-file/{{i.id}}/?file_type=video"> Download </a>
+				{% if i.repo_video %}
+					{% getmedia_file i.id 'video' as file_path %}
+					<video width="300" height="200" controls>
+						<source src="{{file_path}}" type="video/mp4">
+						Your browser does not support the video tag.
+					</video>
+					<a href="/download-file/{{i.id}}/?file_type=video"> Download </a>
+				{% else %}
+					No Video File
+				{% endif %}
 				</td>
 			</tr>
 			{% endfor %}
