@@ -13,6 +13,9 @@ class Repository(BaseContent):
 	repo_id = models.CharField(max_length=8000,null=True,blank=True)
 	name = models.CharField(max_length=250,null=True,blank=True)
 
+	def __str__(self):
+		return str(self.repo_id)
+
 
 class RepositoryFiles(BaseContent):
 	repo = models.ForeignKey(Repository,on_delete=models.CASCADE,null=True,blank=True)
@@ -20,6 +23,6 @@ class RepositoryFiles(BaseContent):
 	repo_audio = models.FileField(upload_to='Audios/%Y/%m/%d',null=True,blank=True)
 	repo_video = models.FileField(upload_to='Videos/%Y/%m/%d',null=True,blank=True)
 
-	def __unicode__(self):
-		return str(self.repo.rep_id)	
+	def __str__(self):
+		return str(self.repo.repo_id)	
 	

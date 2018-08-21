@@ -51,7 +51,7 @@ def repo_view(request,pk):
 			repofile_obj.repo_video = repo_video
 			repofile_obj.save()
 		else:
-			msg = 'Please upload image/audio/video file'
+			msg = 'Please upload atleast one image/audio/video file'
 
 	return render(request,'repo_view.html',locals())	
 

@@ -11,11 +11,11 @@
 	<div>
 		<form name="upload_form" action="." method="post" enctype="multipart/form-data" >{% csrf_token %}
 			Image : 
-			<input type="file" name="repo_image" id="repo_image" accept="image/*" /> <br /> <br />
+			<input type="file" name="repo_image" id="repo_image" /> <br /> <br />
 			Audio : 
-			<input type="file" name="repo_audio" id="repo_audio" accept="audio/*" /> <br /> <br />
+			<input type="file" name="repo_audio" id="repo_audio" /> <br /> <br />
 			Video : 
-			<input type="file" name="repo_video" id="repo_video" accept="video/*" /> <br /> <br />
+			<input type="file" name="repo_video" id="repo_video" /> <br /> <br />
 			<input type="submit" name="submit_btn" />
 			<a href="/repos-list/">
 				<input type="button" name="cancel_btn" value="Cancel" />
@@ -38,13 +38,25 @@
 			<tr>
 				<td>{{forloop.counter}}</td>
 				<td>
-				<a href="/download-file/{{i.id}}/?file_type=image"> {{i.repo_image.name|file_name}} </a>
+				{% getmedia_file i.id 'image' as file_path %}
+				<img src="{{file_path}}" width="200" height="200" />
+				<a href="/download-file/{{i.id}}/?file_type=image"> Download </a>
 				</td>
 				<td>
-				<a href="/download-file/{{i.id}}/?file_type=audio"> {{i.repo_audio.name|file_name}} </a>
+				{% getmedia_file i.id 'audio' as file_path %}
+				<audio controls>
+					<source src="{{file_path}}" type="audio/mpeg">
+					Your browser does not support the audio tag.
+				</audio>
+				<a href="/download-file/{{i.id}}/?file_type=audio"> Download </a>
 				</td>
 				<td>
-				<a href="/download-file/{{i.id}}/?file_type=video"> {{i.repo_video.name|file_name}} </a>
+				{% getmedia_file i.id 'video' as file_path %}
+				<video width="300" height="200" controls>
+					<source src="{{file_path}}" type="video/mp4">
+					Your browser does not support the video tag.
+				</video>
+				<a href="/download-file/{{i.id}}/?file_type=video"> Download </a>
 				</td>
 			</tr>
 			{% endfor %}
@@ -58,8 +70,44 @@ $('#repo_image').bind('change', function() {
 
   //this.files[0].size gets the size of your file.
   var file_size = (this.files[0].size);
-  alert(file_size);
+  //alert(file_size);
 
+});
+</script>
+
+<script>
+$('#repo_image').change(
+    function () {
+        var fileExtension = [  'jpg','png','jpeg'];
+        if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+                alert("Only '.jpg','.png','.jpeg' formats are allowed.");
+                $("#repo_image").val("");
+                return false;
+                }
+});
+</script>
+
+<script>
+$('#repo_audio').change(
+    function () {
+        var fileExtension = [  'mp3' ];
+        if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+                alert("Only '.mp3' format is allowed.");
+                $("#repo_audio").val("");
+                return false;
+                }
+});
+</script>
+
+<script>
+$('#repo_video').change(
+    function () {
+        var fileExtension = [  'mp4'];
+        if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+                alert("Only '.mp4' format is allowed.");
+                $("#repo_video").val("");
+                return false;
+                }
 });
 </script>
 
