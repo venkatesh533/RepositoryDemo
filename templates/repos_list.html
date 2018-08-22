@@ -2,6 +2,11 @@
 <html>
 <head>
 	<title></title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
 </head>
 <body>
 <div style="margin-top: 10%;margin-left: 40%;">
@@ -15,7 +20,7 @@
 
 	<table border="1" style="width:50%;height:50%;text-align: center;">
 		<th>Rep ID</th>
-		{% for i in repos %}
+		{% for i in contacts %}
 		<tr>
 			<td>
 			<a href="/repo-view/{{i.id}}/">{{i.repo_id}}</a>
@@ -23,6 +28,32 @@
 		</tr>
 		{% endfor %}
 	</table>
+
+	{% if contacts.has_other_pages %}
+		<p style="margin-top: 20px;float: right;margin-right: 50%;"> 
+		Showing {{contacts.start_index}} to {{contacts.end_index}} from {{contacts.paginator.count}} entries 
+		</p>
+	  <ul class="pagination" style="float: right;margin-top: 5%;margin-right: -133px;">
+	    {% if contacts.has_previous %}
+	      <li><a href="?page={{ contacts.previous_page_number }}">&laquo;</a></li>
+	    {% else %}
+	      <li class="disabled"><span>&laquo;</span></li>
+	    {% endif %}
+	    {% for i in contacts.paginator.page_range %}
+	      {% if contacts.number == i %}
+	        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+	      {% else %}
+	        <li><a href="?page={{ i }}">{{ i }}</a></li>
+	      {% endif %}
+	    {% endfor %}
+	    {% if contacts.has_next %}
+	      <li><a href="?page={{ contacts.next_page_number }}">&raquo;</a></li>
+	    {% else %}
+	      <li class="disabled"><span>&raquo;</span></li>
+	    {% endif %}
+	  </ul>
+	{% endif %}
+
 </div>
 </body>
 </html>
