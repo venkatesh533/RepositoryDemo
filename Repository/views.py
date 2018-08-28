@@ -17,6 +17,7 @@ def add_reposit(request):
 
 	if request.method == 'POST':
 		repo_id = request.POST.get('repo_id')
+		repo_id = repo_id.strip()	
 		if repo_id:
 			rep_obj,created = Repository.objects.get_or_create(repo_id=repo_id)
 			return HttpResponseRedirect('/repos-list/')
@@ -53,6 +54,9 @@ def repo_view(request,pk):
 	s = range(0, repo_files.count())
 	contacts = get_pagination(request,repo_files,count)
 	if request.method == 'POST':
+		repo_files = RepositoryFiles.objects.filter(active=2,repo=repo_obj).order_by('-id')
+		contacts = get_pagination(request,repo_files,count)
+		## request file parameters ##
 		repo_image = file_uploads(request,'repo_image')
 		repo_audio = file_uploads(request,'repo_audio')
 		repo_video = file_uploads(request,'repo_video')
@@ -85,4 +89,24 @@ def get_pagination(request, plist, count):
     request.session['var3'] = page
     return plist
 
+## view to edit repository files ##
+def edit_repofiles(request,pk):
+	repofile_obj = RepositoryFiles.objects.get(id=pk)
+
+	if request.method == 'POST':
+		## request file parameters ##
+		repo_image = file_uploads(request,'repo_image')
+		repo_audio = file_uploads(request,'repo_audio')
+		repo_video = file_uploads(request,'repo_video')
+		
+		if repo_image  :
+			repofile_obj.repo_image = repo_image
+		if repo_audio:
+			repofile_obj.repo_audio = repo_audio
+		if repo_video:
+			repofile_obj.repo_video = repo_video
+		repofile_obj.save()
+		return HttpResponseRedirect('/repo-view/%d/'%(repofile_obj.repo.id))
+
+	return render(request,'edit_repofiles.html',locals())
 

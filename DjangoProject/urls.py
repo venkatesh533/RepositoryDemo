@@ -25,6 +25,7 @@ urlpatterns = [
     path('add-reposit/',add_reposit,name="add_reposit"),
     path('repos-list/',repos_list,name="repos_list"),
     path('repo-view/<int:pk>/',repo_view,name="repo_view"),
+    path('edit-repofiles/<int:pk>/',edit_repofiles,name="edit_repofiles"),
     path('download-file/<int:pk>/',download_file,name="download_file"),
 
 ]

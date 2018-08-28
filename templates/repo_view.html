@@ -37,6 +37,7 @@
 			<th>Image</th>
 			<th>Audio</th>
 			<th>Video</th>
+			<th>Action</th>
 			</tr>
 			{% for i in contacts %}
 			<tr>
@@ -73,6 +74,9 @@
 				{% else %}
 					No Video File
 				{% endif %}
+				</td>
+				<td>
+					<a href="/edit-repofiles/{{i.id}}/">Edit</a>	
 				</td>
 			</tr>
 			{% endfor %}
