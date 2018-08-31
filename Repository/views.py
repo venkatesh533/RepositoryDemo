@@ -1,18 +1,27 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.utils.datastructures import MultiValueDictKeyError
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import login_required
 import os
 
 from Repository.models import *
 from Repository.digg_paginator import *
 # Create your views here.
 
+## logout view ##
+def logout_view(request):
+	logout(request)
+	return HttpResponseRedirect('/')
+
 ## home page ##
+@login_required(login_url='/')
 def home(request):
 	return render(request,'home.html',locals())
 
 ## add repository page ##
+@login_required(login_url='/')
 def add_reposit(request):
 
 	if request.method == 'POST':
@@ -27,6 +36,7 @@ def add_reposit(request):
 	return render(request,'add_reposit.html',locals())
 
 ## repositories list page ##
+@login_required(login_url='/')
 def repos_list(request):
 	repos = Repository.objects.filter(active=2).order_by('-id')
 	page = request.GET.get('page',1)
@@ -46,6 +56,7 @@ def file_uploads(request,file_name):
 	return file_obj
 
 ## repository detailed view ##
+@login_required(login_url='/')
 def repo_view(request,pk):
 	repo_obj = Repository.objects.get(id=pk)
 	repo_files = RepositoryFiles.objects.filter(active=2,repo=repo_obj).order_by('-id')
@@ -90,6 +101,7 @@ def get_pagination(request, plist, count):
     return plist
 
 ## view to edit repository files ##
+@login_required(login_url='/')
 def edit_repofiles(request,pk):
 	repofile_obj = RepositoryFiles.objects.get(id=pk)
 
@@ -110,3 +122,44 @@ def edit_repofiles(request,pk):
 
 	return render(request,'edit_repofiles.html',locals())
 
+## To send otp to mobile number ##
+def send_otp(request):
+
+	if request.method == 'POST':
+		mobile_no = request.POST.get('mobile_no')
+		mobile_no = mobile_no.strip()
+		user_obj = RepositoryUser.objects.get_or_none(mobile_no=mobile_no)
+		if user_obj:
+			from random import randint
+			import requests
+			otpno = randint(1000,9999)
+			print(otpno)
+			resp = requests.get('http://zebiapi.vizag.co/cdr1/148971/?mob_num={}&otp={}'.format(mobile_no,otpno))
+			otp_obj,created = OTP.objects.get_or_create(repo_user=user_obj,otp_number=str(otpno))
+			return HttpResponseRedirect('/verify-otp/{}'.format(user_obj.id))
+		else:
+			error_msg = 'Mobile no is not registered'
+	return render(request,'send_otp.html',locals())
+
+## To verify otp ##
+def verify_otp(request,pk):
+	user_obj = RepositoryUser.objects.get_or_none(id=pk)
+	otp_obj = OTP.objects.get_or_none(repo_user=user_obj)
+	status = False
+	if request.method == 'POST':
+		otp_no = request.POST.get('otp_no')
+		otp_no = otp_no.strip()
+		if otp_obj and otp_obj.otp_number == otp_no:
+			status = True
+			otp_obj.otp_verify = True
+			otp_obj.save()
+			if otp_obj.otp_verify:
+				otp_obj.delete()
+			login(request,user_obj.user)
+			return HttpResponseRedirect('/verify-otp/{}/?msg=success'.format(user_obj.id))
+		else:
+			status = False
+			error_msg = 'Invalid OTP'
+		
+
+	return render(request,'verify_otp.html',locals())	

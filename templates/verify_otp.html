@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>OTP Verification</title>
+	<style type="text/css">
+	.repo-form {
+    position: relative;
+    z-index: 1;
+    background: #FFFFFF;
+    max-width: 360px;
+    margin: 0 auto 100px;
+    padding: 45px;
+    text-align: center;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+    margin-top: 10%;
+}
+
+.repo-form input {
+    font-family: "Roboto", sans-serif;
+    outline: 0;
+    background: #f2f2f2;
+    width: 100%;
+    border: 0;
+    margin: 0 0 15px;
+    padding: 15px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+.error{
+	color: red;
+}
+
+	</style>
+</head>
+<body>
+<div class="repo-form">
+	<form name="otp_form" id="otp_form" method="post">{% csrf_token %}
+		<input type="text" name="otp_no" placeholder="OTP No" /> <br/> <br/>
+		<input type="submit" name="submit_btn" value="Verify OTP" style="background: #4CAF50;" /> 
+	</form>
+	{% if status == False and error_msg %}
+		<p class="error">{{error_msg}}</p>
+	{% endif %}
+</div>
+</body>
+
+<script src="/static/js/jquery-3.1.1.min.js" ></script>
+<script src="/static/js/jquery-ui.js" ></script>
+<script src="/static/js/jquery.validate.js"></script>
+
+
+<script type="text/javascript">
+	$('#otp_form').validate({
+		rules:{
+			otp_no:{
+				required:true,
+				number:true,
+				minlength:4,
+				maxlength:4,
+			},
+		},
+	});
+
+</script>
+
+<script type="text/javascript">
+	{% if request.GET.msg == "success" %}
+		alert('Mobile no verified');
+		location.href="/home/";
+	{% endif %}
+</script>
+
+</html>

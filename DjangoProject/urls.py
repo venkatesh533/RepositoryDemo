@@ -21,11 +21,14 @@ from files_download import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',home,name="home"),
+    path('home/',home,name="home"),
     path('add-reposit/',add_reposit,name="add_reposit"),
     path('repos-list/',repos_list,name="repos_list"),
     path('repo-view/<int:pk>/',repo_view,name="repo_view"),
     path('edit-repofiles/<int:pk>/',edit_repofiles,name="edit_repofiles"),
     path('download-file/<int:pk>/',download_file,name="download_file"),
+    path('',send_otp,name="send_otp"),
+    path('verify-otp/<int:pk>/',verify_otp,name="verify_otp"),
+    path('logout/',logout_view,name="logout_view"),
 
 ]
