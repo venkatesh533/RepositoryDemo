@@ -1,0 +1,127 @@
+﻿
+{% extends 'crimedata/base.html' %}
+
+{% block title %}
+<title>CrimeData Repositories List</title>
+{% endblock %}
+
+{% block content %}
+
+ <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="content-page">
+        <!-- Start content -->
+        <div class="content">
+            <form runat="server">
+                <div class="container">
+
+
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="page-title-box">
+                                <h4 class="page-title">Crime Data Repositories </h4>
+                                <ol class="breadcrumb p-0 m-0">
+                                    <li>
+                                        <a href="#">CrimeData Repository</a>
+                                    </li>
+                                    <li class="active">Repositories
+                                    </li>
+                                </ol>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end row -->
+
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="panel panel-default">
+                                <!-- <div class="panel-heading">
+                                        <h4>Invoice</h4>
+                                    </div> -->
+                                <div class="panel-body">
+
+                                {% if repos.count != 0 %}
+                                    <table Class="table table-striped table-bordered table-hover" >
+                                        <tr>
+                                          <th>Repository ID</th>
+                                          <th>Details</th>
+                                        </tr>
+                                        {% for i in contacts %}
+                                        <tr>
+                                          <td>{{i.repo_id}}</td>
+                                          <td><a href="/repo-view/{{i.id}}/"><span aria-hidden='true' class='fa fa-eye'> </span> Details</a></td>
+                                        </tr>
+                                        {% endfor %}
+
+                                      </table> 
+
+                                    <hr />
+                                {% else %}
+                                    <h3>
+                                        <a>No Repositories Found</a>
+
+                                    </h3>
+                                {% endif %}
+
+
+
+
+
+                                </div>
+
+
+                                <div class="col-md-3 pull-right hidden-print">
+                                    <div class="pull-right">
+                                    <!-- Pagination-->
+                                    {% if contacts.has_other_pages %}
+                                        <p style="margin-top: 20px;float: left;"> 
+                                        Showing {{contacts.start_index}} to {{contacts.end_index}} from {{contacts.paginator.count}} entries 
+                                        </p>
+                                      <ul class="pagination" >
+                                        {% if contacts.has_previous %}
+                                          <li><a href="?page={{ contacts.previous_page_number }}">&laquo;</a></li>
+                                        {% else %}
+                                          <li class="disabled"><span>&laquo;</span></li>
+                                        {% endif %}
+                                        {% for i in contacts.paginator.page_range %}
+                                          {% if contacts.number == i %}
+                                            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                                          {% else %}
+                                            <li><a href="?page={{ i }}">{{ i }}</a></li>
+                                          {% endif %}
+                                        {% endfor %}
+                                        {% if contacts.has_next %}
+                                          <li><a href="?page={{ contacts.next_page_number }}">&raquo;</a></li>
+                                        {% else %}
+                                          <li class="disabled"><span>&raquo;</span></li>
+                                        {% endif %}
+                                      </ul>
+                                    {% endif %}
+                                    <!-- -->
+
+                                        <br />
+                                        <a href="javascript:window.print()" class="btn btn-inverse waves-effect waves-light"><i class="fa fa-print"></i>&nbsp; Print</a>
+                                        
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <!-- end row -->
+
+
+
+                </div>
+                <!-- container -->
+            </form>
+        </div>
+        <!-- content -->
+
+{% endblock %}

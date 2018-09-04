@@ -21,7 +21,7 @@ from files_download import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('home/',home,name="home"),
+    path('dashboard/',dashboard,name="dashboard"),
     path('add-reposit/',add_reposit,name="add_reposit"),
     path('repos-list/',repos_list,name="repos_list"),
     path('repo-view/<int:pk>/',repo_view,name="repo_view"),

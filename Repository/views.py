@@ -17,8 +17,13 @@ def logout_view(request):
 
 ## home page ##
 @login_required(login_url='/')
-def home(request):
-	return render(request,'home.html',locals())
+def dashboard(request):
+	repos = Repository.objects.filter(active=2).order_by('-id')
+	page = request.GET.get('page',1)
+	count = 10
+	s = range(0, repos.count())
+	contacts = get_pagination(request,repos,count)
+	return render(request,'crimedata/dashboard.html',locals())
 
 ## add repository page ##
 @login_required(login_url='/')
@@ -33,7 +38,7 @@ def add_reposit(request):
 		else:
 			error_msg = 'Please Enter Repository ID'
 
-	return render(request,'add_reposit.html',locals())
+	return render(request,'crimedata/newrepo.html',locals())
 
 ## repositories list page ##
 @login_required(login_url='/')
@@ -44,7 +49,7 @@ def repos_list(request):
 	s = range(0, repos.count())
 	contacts = get_pagination(request,repos,count)
 	# contacts_pagination = DiggPaginator(s, count, margin=1, tail=1, body=1).page(page)
-	return render(request,'repos_list.html',locals())
+	return render(request,'crimedata/repositorylist.html',locals())
 
 ## fun to upload file objects ##
 def file_uploads(request,file_name):
@@ -58,12 +63,14 @@ def file_uploads(request,file_name):
 ## repository detailed view ##
 @login_required(login_url='/')
 def repo_view(request,pk):
+	data1 = page_redirection(request)
 	repo_obj = Repository.objects.get(id=pk)
 	repo_files = RepositoryFiles.objects.filter(active=2,repo=repo_obj).order_by('-id')
 	page = request.GET.get('page',1)
 	count = 5
 	s = range(0, repo_files.count())
 	contacts = get_pagination(request,repo_files,count)
+	
 	if request.method == 'POST':
 		repo_files = RepositoryFiles.objects.filter(active=2,repo=repo_obj).order_by('-id')
 		contacts = get_pagination(request,repo_files,count)
@@ -81,7 +88,7 @@ def repo_view(request,pk):
 		else:
 			msg = 'Please upload atleast one image/audio/video file'
 
-	return render(request,'repo_view.html',locals())	
+	return render(request,'crimedata/repository_view.html',locals())	
 
 #### pagination for the listing pages
 def get_pagination(request, plist, count):                                       					
@@ -100,11 +107,21 @@ def get_pagination(request, plist, count):
     request.session['var3'] = page
     return plist
 
+#### Pagination redirection view
+def page_redirection(request):
+    data1 = request.session.get('var3')
+    
+    if data1 == None or data1 == '':
+        data1 = 1
+    else:
+        data1 = int(data1)
+    return data1
+
 ## view to edit repository files ##
 @login_required(login_url='/')
 def edit_repofiles(request,pk):
 	repofile_obj = RepositoryFiles.objects.get(id=pk)
-
+	data1 = page_redirection(request)
 	if request.method == 'POST':
 		## request file parameters ##
 		repo_image = file_uploads(request,'repo_image')
@@ -118,7 +135,7 @@ def edit_repofiles(request,pk):
 		if repo_video:
 			repofile_obj.repo_video = repo_video
 		repofile_obj.save()
-		return HttpResponseRedirect('/repo-view/%d/'%(repofile_obj.repo.id))
+		return HttpResponseRedirect('/repo-view/%d/?page=%d'%(repofile_obj.repo.id,data1))
 
 	return render(request,'edit_repofiles.html',locals())
 
@@ -139,7 +156,7 @@ def send_otp(request):
 			return HttpResponseRedirect('/verify-otp/{}'.format(user_obj.id))
 		else:
 			error_msg = 'Mobile no is not registered'
-	return render(request,'send_otp.html',locals())
+	return render(request,'crimedata/login.html',locals())
 
 ## To verify otp ##
 def verify_otp(request,pk):
@@ -162,4 +179,4 @@ def verify_otp(request,pk):
 			error_msg = 'Invalid OTP'
 		
 
-	return render(request,'verify_otp.html',locals())	
+	return render(request,'crimedata/verify_otp.html',locals())	

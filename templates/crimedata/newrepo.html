@@ -1,0 +1,93 @@
+﻿
+{% extends 'crimedata/base.html' %}
+
+{% block title %}
+<title>CrimeData New Repository</title>
+{% endblock %}
+
+{% block content %}
+
+<!-- ============================================================== -->
+        <!-- Start right Content here -->
+        <!-- ============================================================== -->
+        <div class="content-page">
+            <!-- Start content -->
+
+            <form runat="server" method="post" >{% csrf_token %}
+                <div class="content">
+                    <div class="container">
+
+
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="page-title-box">
+                                    <h4 class="page-title">Form Wizard </h4>
+                                    <ol class="breadcrumb p-0 m-0">
+                                        <li>
+                                            <a href="#">CrimeData Repository</a>
+                                        </li>
+                                        <li class="active">New Repository
+                                        </li>
+                                    </ol>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end row -->
+
+
+
+
+
+
+                        <!-- Wizard with Validation -->
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="card-box">
+                                    <h4 class="m-t-0 header-title"><b>New Repository Form</b></h4>
+
+                                    <div id="validation-form">
+                                        <div>
+                                            <section>
+
+                                                <div class="form-group clearfix">
+                                                    <label class="col-lg-2 control-label " for="address2">Repository ID*</label>
+                                                    <div class="col-lg-5">
+                                                        <input type="text" name="repo_id" required />
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group clearfix">
+                                                    <label class="col-lg-2 control-label " for="address2"></label>
+                                                    <div class="col-lg-5">
+                                                        <input type="submit" name="submit_btn" value="Submit" style="margin-top: 30px;" />
+                                                        <a href="/repos-list/">
+                                                            <input type="button" name="cancel_btn" value="Cancel" style="margin-left: 15px;" />
+                                                        </a>
+                                                    </div>
+                                                </div>
+
+                                             
+                                                
+                                                <br />
+                                                <br />
+                                                <br />
+                                            </section>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End row -->
+
+
+
+                    </div>
+                    <!-- container -->
+
+                </div>
+                <!-- content -->
+            </form>
+
+{% endblock %}
