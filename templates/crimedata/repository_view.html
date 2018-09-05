@@ -18,22 +18,31 @@
                 <div class="content">
                     <div class="container">
 
-
                         <div class="row">
                             <div class="col-xs-12">
                                 <div class="page-title-box">
-                                   
+                                   <ol class="breadcrumb p-0 m-0">
+                                    <li>
+                                        <a href="#">CrimeData Repository</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Repositories</a>
+                                    </li>
+                                    <li class="active">Repository Details 
+                                        </li>
+                                </ol>
                                     <div class="clearfix"></div>
                                 </div>
                             </div>
                         </div>
+
                         <!-- end row -->
 
                         <!-- Wizard with Validation -->
 
                         <div class="row">
-                            <div class="col-sm-12">
-                                <div class="card-box">
+                            <div class="col-sm-12" style="border: 2px solid #f3f3f3;">
+                                <div class="card-box" style="border: 0;">
                                     <h4 class="m-t-0 header-title"><b>Repository Details</b></h4>
                                     <p class="text-muted m-b-30 font-13">
                                     </p>
@@ -66,9 +75,9 @@
                                                 
                                                 </div>
  -->
-                                                <div class="col-lg-12">
+                                                <div class="row">
 
-                                                    <div class="col-lg-6">
+                                                    <div class="col-md-4">
                                                         <h2>Add Files</h2>
 
 
@@ -101,9 +110,19 @@
                                                         </div>
 
                                                         <div class="form-group clearfix">
-                                                            <label class="col-lg-2 control-label "></label>
+                                                            <label class="col-lg-2 control-label ">Document </label>
                                                             <div class="col-lg-3">
+                                                                <input type="file" name="repo_document" id="repo_document" style="display: inline;" />
+
+                                                            </div>
+                                                            
+                                                        </div>                                                        
+
+                                                        <div class="form-group clearfix">
+                                                            <label class="col-lg-2 control-label ">
                                                                 <input type="submit" name="submit_btn" value="Submit" />
+                                                            </label>
+                                                            <div class="col-lg-3">
                                                                 <a href="/repos-list/?page={{data1}}">
                                                                     <input type="button" name="cancel_btn" value="Cancel" style="margin-left: 15px;" />
                                                                 </a>
@@ -112,41 +131,97 @@
                                                             
                                                         </div>
                                                     </form>
+                                                    {% if msg %}
+                                                        <p style="color: red;">{{msg}}</p>
+                                                    {% endif %}
                                                 </div>
 
-                                                <div class="col-lg-6">
+                                                <div class="col-md-8">
                                                     <div>
-                                                        {% if repo_files.count != 0 %}
-                                                        <table class="table table-striped table-bordered table-hover" border="1">
+                                                        <h2> Repository Files </h2>
+                                                        <table border="1" class="table table-striped table-bordered table-hover">
                                                             <tr>
-                                                                <th>Files</th>
-                                                                <th>&nbsp;</th>
+                                                            <th>S.No</th>
+                                                            <th>Image</th>
+                                                            <th>Audio</th>
+                                                            <th>Video</th>
+                                                            <th>Document</th>
                                                             </tr>
-                                                            {% for i in repo_files %}
+                                                            {% for i in contacts %}
+                                                            <tr>
+                                                                <td>{{forloop.counter}}</td>
+                                                                <td>
                                                                 {% if i.repo_image %}
-                                                                <tr>
-                                                                    <td>{{i.repo_image.name|file_name}}</td>
-                                                                    <td><a href="/download-file/{{i.id}}/?file_type=image"> Download </a></td>
-                                                                </tr>
+                                                                    {% getmedia_file i.id 'image' as file_path %}
+                                                                    <img src="{{file_path}}" width="200" height="200" />
+                                                                    <a href="/download-file/{{i.id}}/?file_type=image"> Download </a>
+                                                                {% else %}
+                                                                    No Image File
                                                                 {% endif %}
+                                                                </td>
+                                                                <td>
                                                                 {% if i.repo_audio %}
-                                                                <tr>
-                                                                    <td>{{i.repo_audio.name|file_name}}</td>
-                                                                    <td><a href="/download-file/{{i.id}}/?file_type=audio"> Download </a></td>
-                                                                </tr>
+                                                                    {% getmedia_file i.id 'audio' as file_path %}
+                                                                    <audio controls>
+                                                                        <source src="{{file_path}}" type="audio/mpeg">
+                                                                        Your browser does not support the audio tag.
+                                                                    </audio>
+                                                                    <a href="/download-file/{{i.id}}/?file_type=audio"> Download </a>
+                                                                {% else %}
+                                                                    No Audio File
                                                                 {% endif %}
+                                                                </td>
+                                                                <td>
                                                                 {% if i.repo_video %}
-                                                                <tr>
-                                                                    <td>{{i.repo_video.name|file_name}}</td>
-                                                                    <td><a href="/download-file/{{i.id}}/?file_type=video"> Download </a></td>
-                                                                </tr>
+                                                                    {% getmedia_file i.id 'video' as file_path %}
+                                                                    <video width="300" height="200" controls>
+                                                                        <source src="{{file_path}}" type="video/mp4">
+                                                                        Your browser does not support the video tag.
+                                                                    </video>
+                                                                    <a href="/download-file/{{i.id}}/?file_type=video"> Download </a>
+                                                                {% else %}
+                                                                    No Video File
                                                                 {% endif %}
+                                                                </td>
+                                                                <td>
+                                                                {% if i.repo_document %}
+                                                                    <a href="/download-file/{{i.id}}/?file_type=document"> Download </a>
+                                                                {% else %}
+                                                                    No Document File
+                                                                {% endif %}
+                                                                </td>
+                                                            </tr>
                                                             {% endfor %}
-                                                            
                                                         </table>
-                                                        {% else %}
-                                                            <h4>No Files Found</h4>
-                                                        {% endif %}
+
+                                                        <!-- pagination -->
+                                                        {% if contacts.has_other_pages %}
+                                                            <div class="col-md-4">
+                                                                <p style="margin-top: 20px;margin-right: 20%;"> Showing {{contacts.start_index}} to {{contacts.end_index}} from {{contacts.paginator.count}} entries </p>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                              <ul class="pagination" style="margin-top: 3%;margin-right: -133px;">
+                                                                {% if contacts.has_previous %}
+                                                                  <li><a href="?page={{ contacts.previous_page_number }}">&laquo;</a></li>
+                                                                {% else %}
+                                                                  <li class="disabled"><span>&laquo;</span></li>
+                                                                {% endif %}
+                                                                {% for i in contacts.paginator.page_range %}
+                                                                  {% if contacts.number == i %}
+                                                                    <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                                                                  {% else %}
+                                                                    <li><a href="?page={{ i }}">{{ i }}</a></li>
+                                                                  {% endif %}
+                                                                {% endfor %}
+                                                                {% if contacts.has_next %}
+                                                                  <li><a href="?page={{ contacts.next_page_number }}">&raquo;</a></li>
+                                                                {% else %}
+                                                                  <li class="disabled"><span>&raquo;</span></li>
+                                                                {% endif %}
+                                                              </ul>
+                                                            </div>
+                                                    {% endif %}
+
                                                     </div>
                                                 </div>
 
@@ -154,9 +229,6 @@
 
 
                                                 </div>
-                                                {% if msg %}
-                                                    <p style="color: red;">{{msg}}</p>
-                                                {% endif %}
 
                                                 <br />
                                                 <br />
@@ -224,6 +296,18 @@ $('#repo_video').change(
         if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
                 alert("Only '.mp4' format is allowed.");
                 $("#repo_video").val("");
+                return false;
+                }
+});
+</script>
+
+<script>
+$('#repo_document').change(
+    function () {
+        var fileExtension = [  'pdf','txt','xls','xlsx','csv' ];
+        if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+                alert("Only '.txt','.pdf','.xls','.xlsx','.csv' formats are allowed.");
+                $("#repo_document").val("");
                 return false;
                 }
 });

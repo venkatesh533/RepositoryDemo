@@ -26,7 +26,8 @@ class RepositoryFiles(BaseContent):
 	repo_image = models.ImageField(upload_to='Images/%Y/%m/%d',null=True,blank=True)
 	repo_audio = models.FileField(upload_to='Audios/%Y/%m/%d',null=True,blank=True)
 	repo_video = models.FileField(upload_to='Videos/%Y/%m/%d',null=True,blank=True)
-
+	repo_document = models.FileField(upload_to='Documents/%Y/%m/%d',null=True,blank=True)
+	
 	def __str__(self):
 		return str(self.repo.repo_id)	
 

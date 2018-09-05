@@ -18,9 +18,10 @@ def download_file(request,pk):
             download_file = obj.repo_audio
         elif file_type == 'video':
             download_file = obj.repo_video
+        elif file_type == 'document':
+            download_file = obj.repo_document
     except :
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
-    # import ipdb;ipdb.set_trace();
     file_name = str(download_file.name)
     file_path = settings.MEDIA_ROOT+file_name
     
@@ -32,4 +33,3 @@ def download_file(request,pk):
 
     return response
 
-# def download_fun(request,pk):
