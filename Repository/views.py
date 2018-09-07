@@ -4,6 +4,7 @@ from django.utils.datastructures import MultiValueDictKeyError
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 import os
 
 from Repository.models import *
@@ -70,6 +71,10 @@ def repo_view(request,pk):
 	count = 5
 	s = range(0, repo_files.count())
 	contacts = get_pagination(request,repo_files,count)
+	repo_images = repo_files.filter(~Q(repo_image=None))
+	repo_audios = repo_files.filter(~Q(repo_audio=None))
+	repo_videos = repo_files.filter(~Q(repo_video=None))
+	repo_docs = repo_files.filter(~Q(repo_document=None))
 	
 	if request.method == 'POST':
 		repo_files = RepositoryFiles.objects.filter(active=2,repo=repo_obj).order_by('-id')
@@ -88,7 +93,7 @@ def repo_view(request,pk):
 			repofile_obj.repo_document = repo_document
 			repofile_obj.save()
 		else:
-			msg = 'Please upload atleast one image/audio/video file'
+			msg = 'Please upload atleast one image/audio/video/document file'
 
 	return render(request,'crimedata/repository_view.html',locals())	
 
