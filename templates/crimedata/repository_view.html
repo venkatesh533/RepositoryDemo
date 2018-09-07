@@ -207,7 +207,7 @@
                                                                 {% endfor %}
                                                             </div>
                                                         {% else %}
-                                                            <p>No images</p>
+                                                            <p>No audios</p>
                                                         {% endif %}
 
                                                         <!-- Videos -->
@@ -256,8 +256,6 @@
                                                 </div>
 
 
-
-
                                                 </div>
 
                                                 <br />
@@ -283,7 +281,6 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript">
 //binds to onchange event of your input field
 $('#repo_image').bind('change', function() {
@@ -369,9 +366,9 @@ $('#repo_document').change(
             {% endif %}
         {% endfor %}
 
-        {% for i in repo_documents %}
+        {% for i in repo_docs %}
             {% if i.repo_document %}
-
+                
             {% else %}
                 $('#doc_{{i.id}}').remove();
             {% endif %}

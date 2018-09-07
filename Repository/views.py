@@ -71,10 +71,11 @@ def repo_view(request,pk):
 	count = 5
 	s = range(0, repo_files.count())
 	contacts = get_pagination(request,repo_files,count)
-	repo_images = repo_files.filter(~Q(repo_image=None))
-	repo_audios = repo_files.filter(~Q(repo_audio=None))
-	repo_videos = repo_files.filter(~Q(repo_video=None))
-	repo_docs = repo_files.filter(~Q(repo_document=None))
+	repo_images = repo_files.filter(~Q(repo_image=''))
+	repo_audios = repo_files.filter(~Q(repo_audio=''))
+	repo_videos = repo_files.filter(~Q(repo_video=''))
+	repo_docs = repo_files.filter(~Q(repo_document='' or None))
+	
 	
 	if request.method == 'POST':
 		repo_files = RepositoryFiles.objects.filter(active=2,repo=repo_obj).order_by('-id')
